@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String            @id @default(uuid())
+  email            String            @unique
+  password         String
+  name             String
+  role             UserRole          @default(REQUESTER)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  purchaseRequests PurchaseRequest[]
+
+  @@map("users")
+}
+
+model PurchaseRequest {
+  id          String              @id @default(uuid())
+  title       String
+  description String?             @db.Text
+  status      PurchaseStatus      @default(PENDING)
+  userId      String
+  user        User                @relation(fields: [userId], references: [id])
+  items       PurchaseItem[]
+  totalAmount Decimal             @default(0) @db.Decimal(10, 2)
+  approvedBy  String?
+  approvedAt  DateTime?
+  rejectedBy  String?
+  rejectedAt  DateTime?
+  reason      String?             @db.Text
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@map("purchase_requests")
+}
+
+model PurchaseItem {
+  id                String          @id @default(uuid())
+  purchaseRequestId String
+  purchaseRequest   PurchaseRequest @relation(fields: [purchaseRequestId], references: [id], onDelete: Cascade)
+  description       String
+  quantity          Int
+  unitPrice         Decimal         @db.Decimal(10, 2)
+  totalPrice        Decimal         @db.Decimal(10, 2)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@map("purchase_items")
+}
+
+enum UserRole {
+  REQUESTER
+  APPROVER
+  ADMIN
+}
+
+enum PurchaseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
