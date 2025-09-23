@@ -31,8 +31,8 @@ app.register(swagger, {
         email: 'dev@empresa.com'
       }
     },
-    host: 'localhost:3333',
-    schemes: ['http'],
+    host: 'mvpdesafionode-api.onrender.com',
+    schemes: ['https'],
     consumes: ['application/json'],
     produces: ['application/json'],
     securityDefinitions: {
@@ -209,11 +209,7 @@ const start = async () => {
   try {
     const port = Number(process.env.PORT) || 3333;
     await app.listen({ port, host: '0.0.0.0' });
-    console.log(`🚀 Servidor rodando na porta ${port}`);
-    console.log(`📚 Documentação Swagger disponível em http://localhost:${port}/docs`);
-    console.log(`🔍 Health check disponível em http://localhost:${port}/health`);
   } catch (err) {
-    console.error('Erro ao iniciar servidor:', err);
     process.exit(1);
   }
 };

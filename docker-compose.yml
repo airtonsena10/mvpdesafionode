@@ -15,6 +15,32 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.optimized
+    container_name: purchase-request-api-optimized
+    restart: always
+    ports:
+      - "3334:3333"  # Porta diferente para não conflitar
+    environment:
+      - NODE_ENV=production
+      - PORT=3333
+      - DATABASE_URL=mysql://purchase_user:purchase_password@mysql:3306/purchase_requests
+      - JWT_SECRET=42653eb82621fe5fa80b5409b6545912d7424e494f26dd47e571a1acc3a5a6fb61956d61342894f516ba36b85cee43999c31f38bf469e3ff4e1f7caa3c3e68f3
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    volumes:
+      - ./prisma:/app/prisma
 
 volumes:
   mysql_data:
+
+networks:
+  app-network:
+    driver: bridge

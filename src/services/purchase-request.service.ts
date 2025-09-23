@@ -38,14 +38,13 @@ export class PurchaseRequestService {
       }
     });
 
-    console.log(`Nova requisição criada: ${purchaseRequest.id}`);
     return purchaseRequest;
   }
 
   async findAll(userId?: string, role?: string): Promise<PurchaseRequest[]> {
     const where: Prisma.PurchaseRequestWhereInput = {};
 
-    // Se não for ADMIN ou APPROVER, só pode ver suas próprias requisições
+
     if (role !== 'ADMIN' && role !== 'APPROVER' && userId) {
       where.userId = userId;
     }
@@ -67,7 +66,6 @@ export class PurchaseRequestService {
       }
     });
 
-    console.log(`Listagem de requisições - Total: ${requests.length}`);
     return requests;
   }
 
@@ -95,7 +93,6 @@ export class PurchaseRequestService {
       throw new Error('Sem permissão para visualizar esta requisição');
     }
 
-    console.log(`Requisição consultada: ${id}`);
     return request;
   }
 
@@ -152,7 +149,6 @@ export class PurchaseRequestService {
       }
     });
 
-    console.log(` Requisição atualizada: ${id} - Status: ${updatedRequest.status}`);
     return updatedRequest;
   }
 }

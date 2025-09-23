@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthService } from '../services/auth.service';
-import { LoginDTO, RegisterDTO } from '../types';
+import { LoginDTO, RegisterDTO, JwtPayload } from '../types';
 import { z } from 'zod';
 
 const authService = new AuthService();
@@ -30,7 +30,6 @@ export class AuthController {
         user: userWithoutPassword
       });
     } catch (error: any) {
-      console.log('[AUTH] Erro no registro:', error);
       
       if (error instanceof z.ZodError) {
         return reply.status(400).send({ 
@@ -67,7 +66,6 @@ export class AuthController {
         user: userWithoutPassword
       });
     } catch (error: any) {
-      console.log('[AUTH] Erro no login:', error);
       
       if (error instanceof z.ZodError) {
         return reply.status(400).send({ 
@@ -88,7 +86,8 @@ export class AuthController {
         return reply.status(401).send({ error: 'Não autenticado' });
       }
 
-      const user = await authService.getUserById(request.user.id);
+      const userPayload = request.user as JwtPayload;
+      const user = await authService.getUserById(userPayload.id);
 
       if (!user) {
         return reply.status(404).send({ error: 'Usuário não encontrado' });
@@ -98,7 +97,6 @@ export class AuthController {
 
       return reply.send(userWithoutPassword);
     } catch (error) {
-      console.log('[AUTH] Erro ao buscar usuário:', error);
       return reply.status(500).send({ error: 'Erro ao buscar dados do usuário' });
     }
   }

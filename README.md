@@ -1,6 +1,6 @@
 # 🛒 API de Gestão de Requisições de Compra
 
-[![Swagger Documentation](https://img.shields.io/badge/Swagger-Documentation-green?style=for-the-badge&logo=swagger)](http://localhost:3333/docs)
+[![Swagger Documentation](https://img.shields.io/badge/Swagger-Documentation-green?style=for-the-badge&logo=swagger)](https://mvpdesafionode-api.onrender.com/docs)
 
 
 Sistema MVP para gestão de requisições de compra, permitindo que usuários cadastrem requisições, adicionem itens e acompanhem o status até aprovação ou rejeição.
@@ -152,26 +152,26 @@ O servidor estará disponível em `http://localhost:3333`
 
 ### 6. Acesse a documentação
 Após iniciar o servidor, acesse:
-- **📖 [Documentação Swagger](http://localhost:3333/docs)** - Interface interativa para testar a API
-- **🔍 [Health Check](http://localhost:3333/health)** - Status do servidor
-- **ℹ️ [Informações da API](http://localhost:3333/)** - Detalhes gerais
+- **📖 [Documentação Swagger](https://mvpdesafionode-api.onrender.com/docs)** - Interface interativa para testar a API
+- **🔍 [Health Check](https://mvpdesafionode-api.onrender.com/health)** - Status do servidor
+- **ℹ️ [Informações da API](https://mvpdesafionode-api.onrender.com/)** - Detalhes gerais
 
 ## 📚 Documentação da API
 
 ### 🎯 Acesso Rápido
-- **📖 Documentação Swagger**: http://localhost:3333/docs
-- **🔍 Health Check**: http://localhost:3333/health
-- **ℹ️ Informações da API**: http://localhost:3333/
+- **📖 Documentação Swagger**: https://mvpdesafionode-api.onrender.com/docs
+- **🔍 Health Check**: https://mvpdesafionode-api.onrender.com/health
+- **ℹ️ Informações da API**: https://mvpdesafionode-api.onrender.com/
 
 ### Base URL
 ```
-http://localhost:3333
+https://mvpdesafionode-api.onrender.com
 ```
 
 ### 📖 Documentação Interativa (Swagger)
 A API possui documentação completa e interativa disponível em:
 ```
-http://localhost:3333/docs
+https://mvpdesafionode-api.onrender.com/docs
 ```
 
 A documentação Swagger inclui:
@@ -446,7 +446,7 @@ docker-compose down     # Para MySQL
 
 ### 🎯 Usando a Documentação Swagger (Recomendado)
 
-1. **Acesse a documentação**: http://localhost:3333/docs
+1. **Acesse a documentação**: https://mvpdesafionode-api.onrender.com/docs
 2. **Teste os endpoints diretamente** na interface Swagger
 3. **Configure a autenticação**:
    - Clique em "Authorize" no topo da página
@@ -458,23 +458,23 @@ docker-compose down     # Para MySQL
 
 ```bash
 # 1. Cadastrar usuário
-curl -X POST http://localhost:3333/api/auth/register \
+curl -X POST https://mvpdesafionode-api.onrender.com/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"123456","name":"Test User","role":"REQUESTER"}'
 
 # 2. Fazer login
-curl -X POST http://localhost:3333/api/auth/login \
+curl -X POST https://mvpdesafionode-api.onrender.com/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"123456"}'
 
 # 3. Criar requisição (usar token do login)
-curl -X POST http://localhost:3333/api/purchase-requests \
+curl -X POST https://mvpdesafionode-api.onrender.com/api/purchase-requests \
   -H "Authorization: Bearer SEU_TOKEN_AQUI" \
   -H "Content-Type: application/json" \
   -d '{"title":"Nova Requisição","description":"Descrição da requisição","items":[{"description":"Item 1","quantity":1,"unitPrice":10.00}]}'
 
 # 4. Listar requisições
-curl -X GET http://localhost:3333/api/purchase-requests \
+curl -X GET https://mvpdesafionode-api.onrender.com/api/purchase-requests \
   -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 

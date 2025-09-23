@@ -27,7 +27,6 @@ export class AuthService {
       }
     });
 
-    console.log(`Novo usuário registrado: ${email}`);
     return user;
   }
 
@@ -39,18 +38,15 @@ export class AuthService {
     });
 
     if (!user) {
-      console.log(` Tentativa de login falhou - usuário não encontrado: ${email}`);
       return null;
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      console.log(`Tentativa de login falhou - senha inválida: ${email}`);
       return null;
     }
 
-    console.log(`Login bem-sucedido: ${email}`);
     return user;
   }
 

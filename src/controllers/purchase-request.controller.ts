@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { PurchaseRequestService } from '../services/purchase-request.service';
-import { CreatePurchaseRequestDTO, UpdatePurchaseRequestDTO } from '../types';
+import { CreatePurchaseRequestDTO, UpdatePurchaseRequestDTO, JwtPayload } from '../types';
 import { z } from 'zod';
 
 const purchaseRequestService = new PurchaseRequestService();
@@ -26,7 +26,8 @@ export class PurchaseRequestController {
   async create(request: FastifyRequest, reply: FastifyReply) {
     try {
       const data = createSchema.parse(request.body);
-      const userId = request.user!.id;
+      const user = request.user as JwtPayload;
+      const userId = user.id;
 
       const purchaseRequest = await purchaseRequestService.create(
         data as CreatePurchaseRequestDTO,
@@ -35,7 +36,6 @@ export class PurchaseRequestController {
 
       return reply.status(201).send(purchaseRequest);
     } catch (error: any) {
-      console.log('[PURCHASE] Erro ao criar requisição:', error);
       
       if (error instanceof z.ZodError) {
         return reply.status(400).send({ 
@@ -52,14 +52,23 @@ export class PurchaseRequestController {
 
   async findAll(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const userId = request.user!.id;
-      const role = request.user!.role;
+      const user = request.user as JwtPayload;
+      const userId = user.id;
+      const role = user.role;
 
       const requests = await purchaseRequestService.findAll(userId, role);
 
-      return reply.send(requests);
+      
+      return reply.send({
+        data: requests,
+        pagination: {
+          page: 1,
+          limit: requests.length,
+          total: requests.length,
+          totalPages: 1
+        }
+      });
     } catch (error: any) {
-      console.log('[PURCHASE] Erro ao listar requisições:', error);
       return reply.status(500).send({ 
         error: 'Erro ao listar requisições' 
       });
@@ -69,8 +78,9 @@ export class PurchaseRequestController {
   async findById(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
       const { id } = request.params;
-      const userId = request.user!.id;
-      const role = request.user!.role;
+      const user = request.user as JwtPayload;
+      const userId = user.id;
+      const role = user.role;
 
       const purchaseRequest = await purchaseRequestService.findById(id, userId, role);
 
@@ -80,7 +90,6 @@ export class PurchaseRequestController {
 
       return reply.send(purchaseRequest);
     } catch (error: any) {
-      console.log('[PURCHASE] Erro ao buscar requisição:', error);
       
       if (error.message === 'Sem permissão para visualizar esta requisição') {
         return reply.status(403).send({ error: error.message });
@@ -96,8 +105,9 @@ export class PurchaseRequestController {
     try {
       const { id } = request.params;
       const data = updateSchema.parse(request.body);
-      const userId = request.user!.id;
-      const role = request.user!.role;
+      const user = request.user as JwtPayload;
+      const userId = user.id;
+      const role = user.role;
 
       const updatedRequest = await purchaseRequestService.update(
         id,
@@ -108,7 +118,6 @@ export class PurchaseRequestController {
 
       return reply.send(updatedRequest);
     } catch (error: any) {
-      console.log('[PURCHASE] Erro ao atualizar requisição:', error);
       
       if (error instanceof z.ZodError) {
         return reply.status(400).send({ 
