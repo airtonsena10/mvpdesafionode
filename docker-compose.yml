@@ -6,10 +6,10 @@ services:
     container_name: purchase-request-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: purchase_requests
-      MYSQL_USER: purchase_user
-      MYSQL_PASSWORD: purchase_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -25,12 +25,12 @@ services:
     container_name: purchase-request-api-optimized
     restart: always
     ports:
-      - "3334:3333"  # Porta diferente para não conflitar
+      - "${API_PORT:-3334}:${PORT:-3333}"
     environment:
-      - NODE_ENV=production
-      - PORT=3333
-      - DATABASE_URL=mysql://purchase_user:purchase_password@mysql:3306/purchase_requests
-      - JWT_SECRET=42653eb82621fe5fa80b5409b6545912d7424e494f26dd47e571a1acc3a5a6fb61956d61342894f516ba36b85cee43999c31f38bf469e3ff4e1f7caa3c3e68f3
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${PORT:-3333}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mysql
     networks:
